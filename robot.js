@@ -119,5 +119,3 @@ var robot = (function () {
     }
   };
 })();
-
-export default robot();
