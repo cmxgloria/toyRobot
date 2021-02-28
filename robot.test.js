@@ -1,208 +1,239 @@
-// need to copy robot.js code here, vallnala js in IIFE can not import and export, private scope otherwise override by other variable
+// // need to copy robot.js code here, vallnala js in IIFE can not import and export, private scope otherwise override by other variable
 
-// IIFE to create private scope
-var robot = (function () {
+// // IIFE to create private scope
+// var robot = (function () {
+//   // private variables
+//   var directions = ["east", "south", "west", "north"];
+//   var tableDimension = [5, 5];
 
-  // private variables
-  var directions = ['east', 'south', 'west', 'north'];
-  var tableDimension = [5, 5];
+//   // robot currentStatus stores x, y and facing direction
+//   var currentStatus = {}; //  e.g. {x: 2, y:3, f: 'east'}
 
-  // robot currentStatus stores x, y and facing direction
-  var currentStatus = {};  //  e.g. {x: 2, y:3, f: 'east'}
+//   // check if number is number
+//   var isInt = function (num) {
+//     return num === parseInt(num, 10);
+//   };
 
+//   var isWithinTable = function (x, y) {
+//     return x <= tableDimension[0] && x >= 0 && y <= tableDimension[1] && y >= 0;
+//   };
 
-  // check if number is number
-  var isInt = function (num) {
-    return num === parseInt(num, 10);
-  };
+//   var isValidDirection = function (direction) {
+//     return direction && directions.indexOf(direction.toLowerCase()) > -1;
+//   };
 
-  var isWithinTable = function (x, y) {
-    return x <= tableDimension[0] && x >= 0 && y <= tableDimension[1] && y >= 0;
-  };
+//   var setCurrentStatus = function (x, y, f) {
+//     currentStatus.x = x;
+//     currentStatus.y = y;
+//     currentStatus.f = f.toLowerCase();
+//   };
 
-  var isValidDirection = function (direction) {
-    return direction && directions.indexOf(direction.toLowerCase()) > -1;
-  };
+//   var isPlaced = function () {
+//     return (
+//       (currentStatus.x || currentStatus.x === 0) &&
+//       (currentStatus.y || currentStatus.y === 0) &&
+//       currentStatus.f
+//     );
+//   };
 
-  var setCurrentStatus = function (x, y, f) {
-    currentStatus.x = x;
-    currentStatus.y = y;
-    currentStatus.f = f.toLowerCase();
-  };
+//   var rotate = function (num) {
+//     if (isPlaced()) {
+//       var currentIndex = directions.indexOf(currentStatus.f);
+//       var directionsLength = directions.length; // 4
+//       // ['east', 'south', 'west', 'north']
+//       // turn left : index - 1, turn right: index + 1
+//       var newDirectionIndex =
+//         (currentIndex + directionsLength + num) % directionsLength; // prevent negative index
+//       // update current status
+//       setCurrentStatus(
+//         currentStatus.x,
+//         currentStatus.y,
+//         directions[newDirectionIndex]
+//       );
+//     }
+//   };
 
-  var isPlaced = function () {
-    return (currentStatus.x || currentStatus.x === 0) && (currentStatus.y || currentStatus.y === 0) && currentStatus.f;
-  };
+//   // public functions
 
-  var rotate = function (num) {
-    if (isPlaced()) {
-      var currentIndex = directions.indexOf(currentStatus.f);
-      var directionsLength = directions.length; // 4
-      // ['east', 'south', 'west', 'north']
-      // turn left : index - 1, turn right: index + 1
-      var newDirectionIndex = (currentIndex + directionsLength + num) % directionsLength; // prevent negative index
-      // update current status
-      setCurrentStatus(currentStatus.x, currentStatus.y, directions[newDirectionIndex]);
-    }
-  }
+//   var report = function () {
+//     // for simplicity
+//     if (isPlaced()) {
+//       console.log(
+//         currentStatus.x + ", " + currentStatus.y + ", " + currentStatus.f
+//       );
+//     } else {
+//       console.info("Please place the robot on the table first");
+//     }
+//   };
 
+//   var place = function (x, y, f) {
+//     // validate all data
+//     if (isInt(x) && isInt(y) && isValidDirection(f) && isWithinTable(x, y)) {
+//       setCurrentStatus(x, y, f);
+//     } else {
+//       // for better User experience report error as well
+//       console.info(
+//         "Cmd has been ignored, please make sure place the robot on table with correct facing"
+//       );
+//     }
+//   };
 
-  // public functions
+//   var move = function () {
+//     if (isPlaced()) {
+//       var newStatus = JSON.parse(JSON.stringify(currentStatus)); // es6 Object.assign({}, currentStatus);
+//       switch (currentStatus.f) {
+//         case "east":
+//           newStatus.x = newStatus.x + 1;
+//           break;
+//         case "south":
+//           newStatus.y = newStatus.y - 1;
+//           break;
+//         case "west":
+//           newStatus.x = newStatus.x - 1;
+//           break;
+//         case "north":
+//           newStatus.y = newStatus.y + 1;
+//           break;
+//       }
 
-  var report = function () {
-    // for simplicity
-    if (isPlaced()) {
-      console.log (currentStatus.x + ', ' + currentStatus.y + ', ' + currentStatus.f);
-    } else {
-      console.info('Please place the robot on the table first');
-    }
+//       if (isWithinTable(newStatus.x, newStatus.y)) {
+//         setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
+//       } else {
+//         // report('Cmd has been ignored to prevent robot falling from table.')
+//       }
+//     }
+//   };
 
-  };
+//   var left = function () {
+//     rotate(-1);
+//   };
 
+//   var right = function () {
+//     rotate(1);
+//   };
 
-  var place = function(x, y, f) {
-    // validate all data
-    if(isInt(x) && isInt(y) && isValidDirection(f) && isWithinTable(x, y)) {
-      setCurrentStatus(x, y, f);
+//   // expose public command functions
+//   return {
+//     place: place,
+//     move: move,
+//     report: report,
+//     left: left,
+//     right: right,
+//     getStatus: function () {
+//       return JSON.parse(JSON.stringify(currentStatus));
+//     },
+//   };
+// })();
 
-    } else {
-      // for better User experience report error as well
-      console.info('Cmd has been ignored, please make sure place the robot on table with correct facing');
-    }
-  };
+// // simple assert function
+// function assert(condition, message) {
+//   if (!condition) {
+//     throw message || "Assertion failed";
+//   }
+// }
 
-  var move = function () {
-    if (isPlaced()) {
-      var newStatus =  JSON.parse(JSON.stringify(currentStatus)); // es6 Object.assign({}, currentStatus);
-      switch (currentStatus.f) {
-        case 'east':
-          newStatus.x = newStatus.x + 1;
-          break;
-        case 'south':
-          newStatus.y = newStatus.y - 1;
-          break;
-        case 'west':
-          newStatus.x = newStatus.x - 1;
-          break;
-        case 'north':
-          newStatus.y = newStatus.y + 1;
-          break;
-      }
+// function assertXYF(robot, x, y, f) {
+//   assert(robot.getStatus().x === x, "x should be " + x);
+//   assert(robot.getStatus().y === y, "y should be " + y);
+//   assert(robot.getStatus().f === f, "facing should be " + f);
+// }
 
-      if (isWithinTable(newStatus.x, newStatus.y)) {
-        setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
-      } else {
-        // report('Cmd has been ignored to prevent robot falling from table.')
-      }
+// // test robot not placed on table
+// console.info("test robot not placed on table, cmd should be ignored");
+// robot.move();
+// assertXYF(robot, undefined, undefined, undefined);
 
-    }
-  };
+// // test placing robot on table not inside the table
+// console.info("test placing robot on table but not inside the table");
+// robot.place(6, 5, "north");
+// var status = robot.getStatus();
+// assertXYF(robot, undefined, undefined, undefined);
 
+// // test preventing falling from table
+// console.info("test preventing falling from table");
+// robot.place(0, 0, "south");
 
-  var left = function () {
-    rotate(-1);
-  };
+// robot.move();
+// assertXYF(robot, 0, 0, "south");
 
-  var right = function () {
-    rotate(1);
-  };
+// robot.place(3, 3, "north");
+// assertXYF(robot, 3, 3, "north");
 
+// robot.move();
+// var status = robot.getStatus();
+// assertXYF(robot, 3, 4, "north");
 
-  // expose public command functions
-  return {
-    place: place,
-    move: move,
-    report: report,
-    left: left,
-    right: right,
-    getStatus: function () {
-      return JSON.parse(JSON.stringify(currentStatus))
-    }
-  };
-})();
+// // example a
+// robot.move();
+// assertXYF(robot, 0, 1, "north");
+// // example b
+// console.info("test left");
+// robot.left();
+// assertXYF(robot, 0, 0, "west");
+// // example c
+// robot.move();
+// robot.move();
+// robot.left();
+// robot.move();
+// assertXYF(robot, 3, 3, "north");
+// // keep moving
+// robot.move();
+// robot.move();
+// assertXYF(robot, 3, 5, "north");
 
+// console.info("test left");
+// robot.left();
+// assertXYF(robot, 3, 5, "west");
 
-// simple assert function
-function assert(condition, message) {
-  if (!condition) {
-    throw message || "Assertion failed";
-  }
-}
+// robot.move();
+// assertXYF(robot, 2, 5, "west");
 
-function assertXYF(robot, x, y, f) {
-  assert(robot.getStatus().x === x, 'x should be ' + x);
-  assert(robot.getStatus().y === y, 'y should be ' + y);
-  assert(robot.getStatus().f === f, 'facing should be ' + f);
-}
+// robot.right();
+// console.info("test right");
+// assertXYF(robot, 2, 5, "north");
 
-// test robot not placed on table
-console.info('test robot not placed on table, cmd should be ignored');
-robot.move();
-assertXYF(robot, undefined, undefined, undefined);
+// robot.right();
+// console.info("test right agin");
+// assertXYF(robot, 2, 5, "east");
 
-// test placing robot on table not inside the table
-console.info('test placing robot on table but not inside the table');
-robot.place(6, 5, 'north');
-var status = robot.getStatus();
-assertXYF(robot, undefined, undefined, undefined);
+// console.info("all passed!");
 
-// test preventing falling from table
-console.info('test preventing falling from table');
-robot.place(0, 0, 'south');
-
-robot.move();
-assertXYF(robot, 0, 0, 'south');
-
-robot.place(3, 3, 'north');
-assertXYF(robot, 3, 3, 'north');
-
-robot.move();
-var status = robot.getStatus();
-assertXYF(robot, 3, 4, 'north');
+const { place, move, report, left, right } = require("./robot");
 
 // example a
-robot.move();
-assertXYF(robot, 0, 1, 'north')
+test("0,0,'north'", () => {
+  expect(move()).toBe("0, 1, 'north'");
+});
 // example b
-console.info('test left');
-robot.left();
-assertXYF(robot, 0, 0, 'west');
+test("if this origin position is 0, 0, 'north', after run left()", () => {
+  expect(left()).toBe("0, 0, 'west'");
+});
+
 // example c
-robot.move();
-robot.move();
-robot.left();
-robot.move();
-assertXYF(robot, 3, 3, 'north');
-// keep moving
-robot.move();
-robot.move();
-assertXYF(robot, 3, 5, 'north');
+test("1,2,east", () => {
+  expect(move()).toBe("2, 2, 'east'");
+  expect(move()).toBe("3, 2, 'east'");
+  expect(left()).toBe("3, 2, 'north'");
+  expect(move()).toBe("3, 3, 'north'");
+});
 
-console.info('test left');
-robot.left();
-assertXYF(robot, 3, 5, 'west');
+// extra sample to test
+test("currentStatus is x: 2, y:3, f: 'east'", () => {
+  expect(currentStatus()).toBe("x: 2, y:3, f: 'east'");
+});
 
-robot.move();
-assertXYF(robot, 2, 5, 'west');
+test("The number is integer", () => {
+  expect(isInt()).toBe(4);
+});
 
-robot.right();
-console.info('test right')
-assertXYF(robot, 2, 5, 'north');
+test("test robot not placed on table, cmd should be ignored", () => {
+  expect(move()).toBe("6, 5, 'north'");
+});
 
-robot.right();
-console.info('test right agin')
-assertXYF(robot, 2, 5, 'east');
+test("test preventing falling from table", () => {
+  expect(move()).toBe("0, 0, 'south'");
+});
 
-console.info('all passed!')
-
-
-
-
-const {place,
-  move,
-  report,
-  left,
-  right} = require('./robot');
-
-  
-
+test("if this origin position is 3, 4, 'east', after run left()", () => {
+  expect(right()).toBe("3, 4, 'south'");
+});

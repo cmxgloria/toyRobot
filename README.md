@@ -1,5 +1,17 @@
 # Toy Robot Simulator
 
+## instruction
+
+1. copy the code and npm init to get package.json
+2. run this command in terminal
+
+```
+node commands.js
+```
+
+3. Please type in command line by line, or 'exit' to exit > place 0,0,north
+4. after it show the currentStatus, use any of command function like move, left, right and report the it prints result in terminal
+
 ## Description
 
 - The application is a simulation of a toy robot moving on a square tabletop,
