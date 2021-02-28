@@ -1,0 +1,20 @@
+{
+  "name": "toyRobotREA",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "robot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmxgloria/toyRobot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmxgloria/toyRobot/issues"
+  },
+  "homepage": "https://github.com/cmxgloria/toyRobot#readme"
+}

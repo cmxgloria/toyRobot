@@ -1,9 +1,6 @@
 
-// IIFE to create private scope
-var robot = (function () {
 
-  // private variables
-  var directions = ['east', 'south', 'west', 'north'];
+  const directions = ['east', 'south', 'west', 'north'];
   var tableDimension = [5, 5];
 
   // robot currentStatus stores x, y and facing direction
@@ -72,7 +69,7 @@ var robot = (function () {
 
   var move = function () {
     if (isPlaced()) {
-      var newStatus =  JSON.parse(JSON.stringify(currentStatus)); // es6 Object.assign({}, currentStatus);
+      var newStatus =  {...currentStatus}; 
       switch (currentStatus.f) {
         case 'east':
           newStatus.x = newStatus.x + 1;
@@ -91,7 +88,8 @@ var robot = (function () {
       if (isWithinTable(newStatus.x, newStatus.y)) {
         setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
       } else {
-        // report('Cmd has been ignored to prevent robot falling from table.')
+        console.error('Cmd has been ignored to prevent robot falling from table.')
+        report()
       }
 
     }
@@ -108,14 +106,14 @@ var robot = (function () {
 
 
   // expose public command functions
-  return {
-    place: place,
-    move: move,
-    report: report,
-    left: left,
-    right: right,
+  module.exports = {
+    place,
+    move,
+    report,
+    left,
+    right,
     getStatus: function () {
       return JSON.parse(JSON.stringify(currentStatus))
     }
   };
-})();
+

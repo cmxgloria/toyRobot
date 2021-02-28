@@ -194,3 +194,15 @@ console.info('test right agin')
 assertXYF(robot, 2, 5, 'east');
 
 console.info('all passed!')
+
+
+
+
+const {place,
+  move,
+  report,
+  left,
+  right} = require('./robot');
+
+  
+
