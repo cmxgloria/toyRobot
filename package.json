@@ -4,7 +4,7 @@
   "description": "## Description",
   "main": "robot.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest robot.test.js"
   },
   "repository": {
     "type": "git",

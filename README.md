@@ -2,9 +2,10 @@
 
 ## instruction
 
-1. copy the code and npm init to get package.json
+1. npm install
 2. run this command in terminal
 
+## usage
 ```
 node commands.js
 ```

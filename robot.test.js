@@ -1,39 +1,39 @@
-const { place, move, report, left, right } = require("./robot");
+const { place, move, report, left, right, getStatus } = require("./robot");
 
-// example a
-test("0,0,'north'", () => {
-  expect(move()).toBe("0, 1, 'north'");
-});
-// example b
-test("if this origin position is 0, 0, 'north', after run left()", () => {
-  expect(left()).toBe("0, 0, 'west'");
+test("good place", () => {
+  place(1, 2, 'north');
+  expect(getStatus()).toEqual({x: 1, y:2, f: "north"});
 });
 
-// example c
-test("1,2,east", () => {
-  expect(move()).toBe("2, 2, 'east'");
-  expect(move()).toBe("3, 2, 'east'");
-  expect(left()).toBe("3, 2, 'north'");
-  expect(move()).toBe("3, 3, 'north'");
+test("bad place", () => {
+  place(1, 9, 'north');
+  expect(getStatus()).toEqual({});
 });
 
-// extra sample to test
-test("currentStatus is x: 2, y:3, f: 'east'", () => {
-  expect(currentStatus()).toBe("x: 2, y:3, f: 'east'");
+test("if this origin position is 0, 0, 'north', after run left", () => {
+  place(0, 0, 'north')
+  left();
+  expect(getStatus()).toEqual({x: 0, y:0, f: "west"});
 });
 
-test("The number is integer", () => {
-  expect(isInt()).toBe(4);
+test("move, left, right", () => {
+  place(1, 2, 'north');
+  move()
+  expect(getStatus()).toEqual({x: 1, y:3, f: "north"});
+
+  left();
+  expect(getStatus()).toEqual({x: 1, y:3, f: "west"});
+  move()
+  expect(getStatus()).toEqual({x: 0, y:3, f: "west"});
+  move()
+  expect(getStatus()).toEqual({x: 0, y:3, f: "west"});
+  right()
+  expect(getStatus()).toEqual({x: 0, y:3, f: "north"});
 });
 
-test("test robot not placed on table, cmd should be ignored", () => {
-  expect(move()).toBe("6, 5, 'north'");
+test("preventing falling from table", () => {
+  place(0, 0, 'south');
+  move()
+  expect(getStatus()).toEqual({x: 0, y:0, f: "south"});
 });
 
-test("test preventing falling from table", () => {
-  expect(move()).toBe("0, 0, 'south'");
-});
-
-test("if this origin position is 3, 4, 'east', after run left()", () => {
-  expect(right()).toBe("3, 4, 'south'");
-});

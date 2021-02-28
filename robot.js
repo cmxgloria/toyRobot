@@ -88,7 +88,7 @@
       if (isWithinTable(newStatus.x, newStatus.y)) {
         setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
       } else {
-        console.error('Cmd has been ignored to prevent robot falling from table.')
+        console.info('Cmd has been ignored to prevent robot falling from table.')
         report()
       }
 
