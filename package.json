@@ -4,7 +4,8 @@
   "description": "## Description",
   "main": "robot.js",
   "scripts": {
-    "test": "jest robot.test.js"
+    "test": "jest robot.test.js",
+    "format": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,8 @@
   "homepage": "https://github.com/cmxgloria/toyRobot#readme",
   "dependencies": {
     "jest": "^26.6.3"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
   }
 }

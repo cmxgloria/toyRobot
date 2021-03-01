@@ -1,119 +1,121 @@
+const directions = ["east", "south", "west", "north"];
+var tableDimension = [5, 5];
 
+// robot currentStatus stores x, y and facing direction
+var currentStatus = {}; //  e.g. {x: 2, y:3, f: 'east'}
 
-  const directions = ['east', 'south', 'west', 'north'];
-  var tableDimension = [5, 5];
+// check if number is number
+var isInt = function (num) {
+  return num === parseInt(num, 10);
+};
 
-  // robot currentStatus stores x, y and facing direction
-  var currentStatus = {};  //  e.g. {x: 2, y:3, f: 'east'}
+var isWithinTable = function (x, y) {
+  return x <= tableDimension[0] && x >= 0 && y <= tableDimension[1] && y >= 0;
+};
 
+var isValidDirection = function (direction) {
+  return direction && directions.indexOf(direction.toLowerCase()) > -1;
+};
 
-  // check if number is number
-  var isInt = function (num) {
-    return num === parseInt(num, 10);
-  };
+var setCurrentStatus = function (x, y, f) {
+  currentStatus.x = x;
+  currentStatus.y = y;
+  currentStatus.f = f.toLowerCase();
+};
 
-  var isWithinTable = function (x, y) {
-    return x <= tableDimension[0] && x >= 0 && y <= tableDimension[1] && y >= 0;
-  };
+var isPlaced = function () {
+  return (
+    (currentStatus.x || currentStatus.x === 0) &&
+    (currentStatus.y || currentStatus.y === 0) &&
+    currentStatus.f
+  );
+};
 
-  var isValidDirection = function (direction) {
-    return direction && directions.indexOf(direction.toLowerCase()) > -1;
-  };
+var rotate = function (num) {
+  if (isPlaced()) {
+    var currentIndex = directions.indexOf(currentStatus.f);
+    var directionsLength = directions.length; // 4
+    // ['east', 'south', 'west', 'north']
+    // turn left : index - 1, turn right: index + 1
+    var newDirectionIndex =
+      (currentIndex + directionsLength + num) % directionsLength; // prevent negative index
+    // update current status
+    setCurrentStatus(
+      currentStatus.x,
+      currentStatus.y,
+      directions[newDirectionIndex]
+    );
+  }
+};
 
-  var setCurrentStatus = function (x, y, f) {
-    currentStatus.x = x;
-    currentStatus.y = y;
-    currentStatus.f = f.toLowerCase();
-  };
+// public functions
 
-  var isPlaced = function () {
-    return (currentStatus.x || currentStatus.x === 0) && (currentStatus.y || currentStatus.y === 0) && currentStatus.f;
-  };
+var report = function () {
+  // for simplicity
+  if (isPlaced()) {
+    console.log(
+      currentStatus.x + ", " + currentStatus.y + ", " + currentStatus.f
+    );
+  } else {
+    console.info("Please place the robot on the table first");
+  }
+};
 
-  var rotate = function (num) {
-    if (isPlaced()) {
-      var currentIndex = directions.indexOf(currentStatus.f);
-      var directionsLength = directions.length; // 4
-      // ['east', 'south', 'west', 'north']
-      // turn left : index - 1, turn right: index + 1
-      var newDirectionIndex = (currentIndex + directionsLength + num) % directionsLength; // prevent negative index
-      // update current status
-      setCurrentStatus(currentStatus.x, currentStatus.y, directions[newDirectionIndex]);
+var place = function (x, y, f) {
+  // validate all data
+  if (isInt(x) && isInt(y) && isValidDirection(f) && isWithinTable(x, y)) {
+    setCurrentStatus(x, y, f);
+  } else {
+    // for better User experience report error as well
+    console.info(
+      "Cmd has been ignored, please make sure place the robot on table with correct facing"
+    );
+  }
+};
+
+var move = function () {
+  if (isPlaced()) {
+    var newStatus = { ...currentStatus };
+    switch (currentStatus.f) {
+      case "east":
+        newStatus.x = newStatus.x + 1;
+        break;
+      case "south":
+        newStatus.y = newStatus.y - 1;
+        break;
+      case "west":
+        newStatus.x = newStatus.x - 1;
+        break;
+      case "north":
+        newStatus.y = newStatus.y + 1;
+        break;
+    }
+
+    if (isWithinTable(newStatus.x, newStatus.y)) {
+      setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
+    } else {
+      console.info("Cmd has been ignored to prevent robot falling from table.");
+      report();
     }
   }
+};
 
+var left = function () {
+  rotate(-1);
+};
 
-  // public functions
+var right = function () {
+  rotate(1);
+};
 
-  var report = function () {
-    // for simplicity
-    if (isPlaced()) {
-      console.log (currentStatus.x + ', ' + currentStatus.y + ', ' + currentStatus.f);
-    } else {
-      console.info('Please place the robot on the table first');
-    }
-
-  };
-
-
-  var place = function(x, y, f) {
-    // validate all data
-    if(isInt(x) && isInt(y) && isValidDirection(f) && isWithinTable(x, y)) {
-      setCurrentStatus(x, y, f);
-
-    } else {
-      // for better User experience report error as well
-      console.info('Cmd has been ignored, please make sure place the robot on table with correct facing');
-    }
-  };
-
-  var move = function () {
-    if (isPlaced()) {
-      var newStatus =  {...currentStatus}; 
-      switch (currentStatus.f) {
-        case 'east':
-          newStatus.x = newStatus.x + 1;
-          break;
-        case 'south':
-          newStatus.y = newStatus.y - 1;
-          break;
-        case 'west':
-          newStatus.x = newStatus.x - 1;
-          break;
-        case 'north':
-          newStatus.y = newStatus.y + 1;
-          break;
-      }
-
-      if (isWithinTable(newStatus.x, newStatus.y)) {
-        setCurrentStatus(newStatus.x, newStatus.y, newStatus.f);
-      } else {
-        console.info('Cmd has been ignored to prevent robot falling from table.')
-        report()
-      }
-
-    }
-  };
-
-
-  var left = function () {
-    rotate(-1);
-  };
-
-  var right = function () {
-    rotate(1);
-  };
-
-
-  // expose public command functions
-  module.exports = {
-    place,
-    move,
-    report,
-    left,
-    right,
-    getStatus: function () {
-      return JSON.parse(JSON.stringify(currentStatus))
-    }
-  };
-
+// expose public command functions
+module.exports = {
+  place,
+  move,
+  report,
+  left,
+  right,
+  getStatus: function () {
+    return JSON.parse(JSON.stringify(currentStatus));
+  },
+};

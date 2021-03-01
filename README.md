@@ -6,6 +6,7 @@
 2. run this command in terminal
 
 ## usage
+
 ```
 node commands.js
 ```
