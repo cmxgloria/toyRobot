@@ -7,7 +7,7 @@ const rd = readline.createInterface({
   terminal: false,
 });
 
-rd.setPrompt("Please type in command line by line, or 'exit' to exit > ");
+rd.setPrompt("Please type in command line by line > ");
 rd.prompt(true);
 
 rd.on("line", function (line) {
@@ -27,10 +27,8 @@ rd.on("line", function (line) {
     if (params.length != 3) {
       console.error("please input correct command!");
     }
-    console.log(str, params);
     const x = parseInt(params[0], 10);
     const y = parseInt(params[1], 10);
-    console.log(x, y, params[2]);
     place(x, y, params[2]);
   }
 

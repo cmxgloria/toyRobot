@@ -48,8 +48,6 @@ var rotate = function (num) {
   }
 };
 
-// public functions
-
 var report = function () {
   // for simplicity
   if (isPlaced()) {
